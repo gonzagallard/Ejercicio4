@@ -3,6 +3,8 @@
 
 #include "funciones.h"
 
+#define MASK_RGB 0xE000
+
 typedef uint8_t color_t;
 
 color_t color_crear(bool r, bool g, bool b){
@@ -25,11 +27,21 @@ struct polilinea {
 
 };
 
+typedef enum {ICONO, NIVEL, SPRITE} figura_tipo_t;
 
+char *figuras[]{
+    [ICONO]  = "Icono",
+    [NIVEL]  = "Nivel",
+    [SPRITE] = "Sprite",
+}
 
-const char* figura_tipo_a_cadena(figura_tipo_t figura);
+const char* figura_tipo_a_cadena(figura_tipo_t figura){
+    return figuras[figura];
+}
 
-bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *infinito, size_t *cantidad_polilineas);
+bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *infinito, size_t *cantidad_polilineas){
+
+}
 
 
 polilinea_t *polilinea_crear_vacia(size_t n) {
