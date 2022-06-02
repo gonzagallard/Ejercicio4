@@ -7,7 +7,6 @@
 #define MASK_NPOL   0xFFFF
 #define MASK_RGB    0xE000
 
-/*
 typedef uint8_t color_t;
 
 color_t color_crear(bool r, bool g, bool b){
@@ -19,8 +18,7 @@ void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
 
 
 }
-*/
-/*
+
 struct polilinea;
 
 typedef struct polilinea polilinea_t;
@@ -29,7 +27,7 @@ struct polilinea {
 
 
 };
-*/
+
 char *figuras[] = {
     [ICONO]  = "Icono",
     [NIVEL]  = "Nivel",
@@ -57,7 +55,6 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
     
     return true;
 }
-/*
 
 polilinea_t *polilinea_crear_vacia(size_t n) {
     printf("POLILINEA N=%zd\n", n);
@@ -89,4 +86,4 @@ void polilinea_destruir(polilinea_t *polilinea) {
 
 
 }
-*/
+

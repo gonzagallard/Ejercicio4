@@ -7,6 +7,4 @@ typedef enum {
     SPRITE
 }figura_tipo_t;
 
-
-
 #endif 
