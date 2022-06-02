@@ -8,4 +8,5 @@ typedef enum {
 }figura_tipo_t;
 
 
+
 #endif 
