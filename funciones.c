@@ -90,7 +90,7 @@ polilinea_t *leer_polilinea(FILE *f){
         float punto_x, punto_y;
         fread(&punto_x, sizeof(float), 1, f);
         fread(&punto_y, sizeof(float), 1, f);
-        polilinea_setear_color(polilinea, i, punto_x, punto_y);
+        polilinea_setear_punto(polilinea, i, punto_x, punto_y);
     }
 }
 
