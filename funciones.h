@@ -1,6 +1,9 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
+#include <stdio.h>
+#include <stdbool.h>
+#include "enum_figuras.h"
 
 const char* figura_tipo_a_cadena(figura_tipo_t figura);
 
