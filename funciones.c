@@ -16,8 +16,7 @@
 typedef uint8_t color_t;
 
 color_t color_crear(bool r, bool g, bool b){
-    color_t color_aux = r << 2 | g << 1 | b ;
-    return color_aux;   // probar con return early
+    return r << 2 | g << 1 | b ;
 }
 
 void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
