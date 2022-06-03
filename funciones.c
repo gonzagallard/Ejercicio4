@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "funciones.h"
 
@@ -33,11 +34,7 @@ struct polilinea{
     int x;
 };
 
-typedef struct polilinea polilinea_t;
-
-typedef enum {ICONO, NIVEL, SPRITE} figura_tipo_t;
-
-char *figuras[]{
+char *figuras[] = {
     [ICONO]  = "Icono",
     [NIVEL]  = "Nivel",
     [SPRITE] = "Sprite",
@@ -48,17 +45,17 @@ const char* figura_tipo_a_cadena(figura_tipo_t figura){
 }
 
 bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *infinito, size_t *cantidad_polilineas){
-    if(fread(nombre, sizeof(char), 20, f) == EOF)
+    if(!fread(nombre, sizeof(char), 20, f))
         return false;
 
     uint8_t caracteristicas;
-    if(fread(&caracteristicas, sizeof(uint8_t), 1, f) == EOF)
+    if(!fread(&caracteristicas, sizeof(uint8_t), 1, f))
         return false;
     *tipo = (caracteristicas & MASK_TIPO) >> 1;
     *infinito = caracteristicas & MASK_ES_INF;
     
     uint16_t n_polilineas;
-    if(fread(&n_polilineas, sizeof(uint16_t), 1, f) == EOF)
+    if(!fread(&n_polilineas, sizeof(uint16_t), 1, f))
         return false;
     *cantidad_polilineas = n_polilineas & MASK_NPOL;
     
@@ -106,9 +103,7 @@ polilinea_t *leer_polilinea(FILE *f){
         fread(&punto_y, sizeof(float), 1, f);
         polilinea_setear_punto(polilinea, i, punto_x, punto_y);
     }
+    return polilinea;
 }
 
-void polilinea_destruir(polilinea_t *polilinea) {
-    free(polilinea);
-}
-
+void polilinea_destruir(polilinea_t *polilinea) {}
