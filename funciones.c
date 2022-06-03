@@ -23,8 +23,7 @@ struct polilinea;
 typedef struct polilinea polilinea_t;
 
 struct polilinea {
-
-
+    int x;
 };
 
 typedef enum {ICONO, NIVEL, SPRITE} figura_tipo_t;
