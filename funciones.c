@@ -19,16 +19,15 @@ void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
 
 }
 
-struct polilinea;
+struct polilinea{
+    int x;
+};
 
 typedef struct polilinea polilinea_t;
 
-struct polilinea {
+typedef enum {ICONO, NIVEL, SPRITE} figura_tipo_t;
 
-
-};
-
-char *figuras[] = {
+char *figuras[]{
     [ICONO]  = "Icono",
     [NIVEL]  = "Nivel",
     [SPRITE] = "Sprite",
