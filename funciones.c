@@ -2,10 +2,11 @@
 
 #include "funciones.h"
 
-#define MASK_ES_INF 0x40
-#define MASK_TIPO   0x0E
-#define MASK_NPOL   0xFFFF
-#define MASK_RGB    0xE000
+#define MASK_ES_INF     0x40
+#define MASK_TIPO       0x0E
+#define MASK_NPOL       0xFFFF
+#define MASK_RGB        0xE000
+#define MASK_NPUNTOS    0x03FF
 
 typedef uint8_t color_t;
 
@@ -75,14 +76,25 @@ bool polilinea_setear_punto(polilinea_t *polilinea, size_t pos, float x, float y
 }
 
 polilinea_t *leer_polilinea(FILE *f){
+    uint16_t encabezado_pol;
+    size_t cant_puntos;
+    
+    fread(&encabezado_pol, sizeof(uint16_t), 1, f);
+    cant_puntos = encabezado_pol & MASK_NPUNTOS;
+    polilinea_t *polilinea = polilinea_crear_vacia(cant_puntos);
 
 
+    polilinea_setear_color(polilinea, color);
 
+    for(size_t i = 0; i < cant_puntos ; i++){
+        float punto_x, punto_y;
+        fread(&punto_x, sizeof(float), 1, f);
+        fread(&punto_y, sizeof(float), 1, f);
+        polilinea_setear_color(polilinea, i, punto_x, punto_y);
+    }
 }
 
 void polilinea_destruir(polilinea_t *polilinea) {
-
-
-
+    free(polilinea);
 }
 
