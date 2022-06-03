@@ -24,8 +24,7 @@ struct polilinea;
 typedef struct polilinea polilinea_t;
 
 struct polilinea {
-
-
+    int x;
 };
 
 char *figuras[] = {
