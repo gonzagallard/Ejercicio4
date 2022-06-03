@@ -5,19 +5,28 @@
 #define MASK_ES_INF     0x40
 #define MASK_TIPO       0x0E
 #define MASK_NPOL       0xFFFF
-#define MASK_RGB        0xE000
+#define MASK_ES_RED     0x8000
+#define MASK_ES_GREEN   0x4000
+#define MASK_ES_BLUE    0x2000
+#define MASK_COLOR_RGB  0x01
 #define MASK_NPUNTOS    0x03FF
+
 
 typedef uint8_t color_t;
 
 color_t color_crear(bool r, bool g, bool b){
-
-
+    color_t color_aux = r << 2 | g << 1 | b ;
+    return color_aux;   // probar con return early
 }
 
 void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
-
-
+    *r = (*g = (*b = 0));
+    if(c & (MASK_COLOR_RGB << 2))
+        *r = 0xFF;
+    if(c & (MASK_COLOR_RGB << 1))
+        *g = 0xFF;
+    if(c & MASK_COLOR_RGB)
+        *b = 0xFF;
 }
 
 struct polilinea{
@@ -83,6 +92,11 @@ polilinea_t *leer_polilinea(FILE *f){
     cant_puntos = encabezado_pol & MASK_NPUNTOS;
     polilinea_t *polilinea = polilinea_crear_vacia(cant_puntos);
 
+    bool es_red   = encabezado_pol & MASK_ES_RED;
+    bool es_green = encabezado_pol & MASK_ES_GREEN;
+    bool es_blue  = encabezado_pol & MASK_ES_BLUE;
+    
+    color_t color = color_crear (es_red, es_green, es_blue);
 
     polilinea_setear_color(polilinea, color);
 
