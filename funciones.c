@@ -14,11 +14,11 @@
 
 typedef uint8_t color_t;
 
-color_t color_crear(bool r, bool g, bool b){
+static color_t color_crear(bool r, bool g, bool b){
     return r << 2 | g << 1 | b ;
 }
 
-void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
+static void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
     *r = (*g = (*b = 0));
     if(c & (MASK_COLOR_RGB << 2))
         *r = 0xFF;
@@ -60,7 +60,7 @@ struct polilinea{
     int x;
 };
 
-polilinea_t *polilinea_crear_vacia(size_t n) {
+static polilinea_t *polilinea_crear_vacia(size_t n) {
     printf("POLILINEA N=%zd\n", n);
     static polilinea_t x;
     return &x;
@@ -68,12 +68,12 @@ polilinea_t *polilinea_crear_vacia(size_t n) {
 
 void polilinea_destruir(polilinea_t *polilinea) {}
 
-bool polilinea_setear_punto(polilinea_t *polilinea, size_t pos, float x, float y) {
+static bool polilinea_setear_punto(polilinea_t *polilinea, size_t pos, float x, float y) {
     printf("POLILINEA[%zd] = (%.2f, %.2f)\n", pos, x, y);
     return true;
 }
 
-bool polilinea_setear_color(polilinea_t *polilinea, color_t color) {
+static bool polilinea_setear_color(polilinea_t *polilinea, color_t color) {
     uint8_t r, g, b;
     color_a_rgb(color, &r, &g, &b);
     printf("POLILINEA COLOR: (%d, %d, %d)\n", r, g, b);
@@ -88,21 +88,28 @@ polilinea_t *leer_polilinea(FILE *f){
     cant_puntos = encabezado_pol & MASK_NPUNTOS;
     polilinea_t *polilinea = polilinea_crear_vacia(cant_puntos);
 
+    if(polilinea == NULL)
+        return NULL;
+
     bool es_red   = encabezado_pol & MASK_ES_RED;
     bool es_green = encabezado_pol & MASK_ES_GREEN;
     bool es_blue  = encabezado_pol & MASK_ES_BLUE;
     
     color_t color = color_crear (es_red, es_green, es_blue);
 
-    polilinea_setear_color(polilinea, color);
+    if(!polilinea_setear_color(polilinea, color)){
+        polilinea_destruir(polilinea);
+        return NULL;
+    }
 
     for(size_t i = 0; i < cant_puntos ; i++){
         float punto_x, punto_y;
         fread(&punto_x, sizeof(float), 1, f);
         fread(&punto_y, sizeof(float), 1, f);
-        polilinea_setear_punto(polilinea, i, punto_x, punto_y);
+        if(!polilinea_setear_punto(polilinea, i, punto_x, punto_y)){
+            polilinea_destruir(polilinea);
+            return NULL;
+        }
     }
     return polilinea;
 }
-
-
