@@ -12,5 +12,5 @@ funciones.o: funciones.c funciones.h
 	$(CC) $(CFLAGS) -c funciones.c
 
 clean:
-	rm-vf *o $(PROGRAM)
+	rm -vf *.o $(PROGRAM)
 
