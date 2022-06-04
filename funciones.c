@@ -12,7 +12,6 @@
 #define MASK_COLOR_RGB  0x01
 #define MASK_NPUNTOS    0x03FF
 
-
 typedef uint8_t color_t;
 
 color_t color_crear(bool r, bool g, bool b){
@@ -28,10 +27,6 @@ void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
     if(c & MASK_COLOR_RGB)
         *b = 0xFF;
 }
-
-struct polilinea{
-    int x;
-};
 
 char *figuras[] = {
     [ICONO]  = "Icono",
@@ -61,22 +56,27 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
     return true;
 }
 
+struct polilinea{
+    int x;
+};
+
 polilinea_t *polilinea_crear_vacia(size_t n) {
     printf("POLILINEA N=%zd\n", n);
     static polilinea_t x;
     return &x;
 }
 
+void polilinea_destruir(polilinea_t *polilinea) {}
+
+bool polilinea_setear_punto(polilinea_t *polilinea, size_t pos, float x, float y) {
+    printf("POLILINEA[%zd] = (%.2f, %.2f)\n", pos, x, y);
+    return true;
+}
 
 bool polilinea_setear_color(polilinea_t *polilinea, color_t color) {
     uint8_t r, g, b;
     color_a_rgb(color, &r, &g, &b);
     printf("POLILINEA COLOR: (%d, %d, %d)\n", r, g, b);
-    return true;
-}
-
-bool polilinea_setear_punto(polilinea_t *polilinea, size_t pos, float x, float y) {
-    printf("POLILINEA[%zd] = (%.2f, %.2f)\n", pos, x, y);
     return true;
 }
 
@@ -105,4 +105,4 @@ polilinea_t *leer_polilinea(FILE *f){
     return polilinea;
 }
 
-void polilinea_destruir(polilinea_t *polilinea) {}
+
