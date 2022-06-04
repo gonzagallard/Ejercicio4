@@ -3,7 +3,12 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "enum_figuras.h"
+      
+typedef enum {
+     ICONO,        
+     NIVEL,    
+     SPRITE
+}figura_tipo_t;
 
 typedef struct polilinea polilinea_t;
 
@@ -14,6 +19,5 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
 polilinea_t *leer_polilinea(FILE *f);
 
 void polilinea_destruir(polilinea_t *p);
-
 
 #endif
