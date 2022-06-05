@@ -13,8 +13,4 @@ clean:
 .PHONY: run
 run: $(PROGRAM)
 	./$(PROGRAM) figuras_in.bin
-.PHONY: val
-val: $(PROGRAM)
-	valgrind --leak-check=full --track-origins=yes --show-reachable=yes -s ./$(PROGRAM) figuras_in.bin
-
 
