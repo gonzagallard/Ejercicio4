@@ -1,6 +1,6 @@
 PROGRAM=main
 CC=gcc
-CFLAGS=-Wall -std=c99 -pedantic -g
+CFLAGS=-Wall -Werror -std=c99 -pedantic -g
 all: $(PROGRAM)
 $(PROGRAM): main.o funciones.o
 	$(CC) $(CFLAGS) main.o funciones.o -o $(PROGRAM)
