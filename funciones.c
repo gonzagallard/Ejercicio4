@@ -3,14 +3,15 @@
 
 #include "funciones.h"
 
-#define MASK_ES_INF     0x40
-#define MASK_TIPO       0x0E
-#define MASK_NPOL       0xFFFF
-#define MASK_ES_RED     0x8000
-#define MASK_ES_GREEN   0x4000
-#define MASK_ES_BLUE    0x2000
-#define MASK_COLOR_RGB  0x01
-#define MASK_NPUNTOS    0x03FF
+#define MASK_ES_INF         0x40
+#define MASK_TIPO           0x0E
+#define MASK_ES_RED         0x8000
+#define MASK_ES_GREEN       0x4000
+#define MASK_ES_BLUE        0x2000
+#define MASK_ON_RED_COLOR   0x04
+#define MASK_ON_GREEN_COLOR 0x02
+#define MASK_ON_BLUE_COLOR  0x01
+#define MASK_NPUNTOS        0x03FF
 
 typedef uint8_t color_t;
 
@@ -20,15 +21,15 @@ static color_t color_crear(bool r, bool g, bool b){
 
 static void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
     *r = (*g = (*b = 0));
-    if(c & (MASK_COLOR_RGB << 2))
+    if(c & MASK_ON_RED_COLOR)
         *r = 0xFF;
-    if(c & (MASK_COLOR_RGB << 1))
+    if(c & MASK_ON_GREEN_COLOR)
         *g = 0xFF;
-    if(c & MASK_COLOR_RGB)
+    if(c & MASK_ON_BLUE_COLOR)
         *b = 0xFF;
 }
 
-char *figuras[] = {
+const char *figuras[] = {
     [ICONO]  = "Icono",
     [NIVEL]  = "Nivel",
     [SPRITE] = "Sprite",
@@ -51,7 +52,7 @@ bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *i
     uint16_t n_polilineas;
     if(!fread(&n_polilineas, sizeof(uint16_t), 1, f))
         return false;
-    *cantidad_polilineas = n_polilineas & MASK_NPOL;
+    *cantidad_polilineas = n_polilineas;
     
     return true;
 }
@@ -84,7 +85,8 @@ polilinea_t *leer_polilinea(FILE *f){
     uint16_t encabezado_pol;
     size_t cant_puntos;
     
-    fread(&encabezado_pol, sizeof(uint16_t), 1, f);
+    if(!fread(&encabezado_pol, sizeof(uint16_t), 1, f))
+    	return NULL;
     cant_puntos = encabezado_pol & MASK_NPUNTOS;
     polilinea_t *polilinea = polilinea_crear_vacia(cant_puntos);
 
@@ -104,9 +106,11 @@ polilinea_t *leer_polilinea(FILE *f){
 
     for(size_t i = 0; i < cant_puntos ; i++){
         float punto_x, punto_y;
-        fread(&punto_x, sizeof(float), 1, f);
-        fread(&punto_y, sizeof(float), 1, f);
-        if(!polilinea_setear_punto(polilinea, i, punto_x, punto_y)){
+        if(!fread(&punto_x, sizeof(float), 1, f) || !fread(&punto_y, sizeof(float), 1, f)){
+	    polilinea_destruir(polilinea);
+	    return NULL;
+	}
+	if(!polilinea_setear_punto(polilinea, i, punto_x, punto_y)){
             polilinea_destruir(polilinea);
             return NULL;
         }
