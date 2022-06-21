@@ -1,13 +1,17 @@
 PROGRAM=main
 CC=gcc
-CFLAGS=-Wall -std=c99 -pedantic -g
+CFLAGS=-Wall -Werror -std=c99 -pedantic -g
 all: $(PROGRAM)
-$(PROGRAM): main.o funciones.o
-	$(CC) $(CFLAGS) main.o funciones.o -o $(PROGRAM)
-main.o: main.c funciones.h
+$(PROGRAM): main.o polilinea.o color.o tipo.o
+	$(CC) $(CFLAGS) main.o polilinea.o color.o tipo.o -o $(PROGRAM)
+main.o: main.c polilinea.h 
 	$(CC) $(CFLAGS) -c main.c
-funciones.o: funciones.c funciones.h
-	$(CC) $(CFLAGS) -c funciones.c
+polilinea.o: polilinea.c polilinea.h color.h tipo.h
+	$(CC) $(CFLAGS) -c polilinea.c
+color.o: color.c color.h
+	$(CC) $(CFLAGS) -c color.c
+tipo.o: tipo.c tipo.h
+	$(CC) $(CFLAGS) -c tipo.c
 clean:
 	rm -vf *.o $(PROGRAM)
 .PHONY: run
