@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "funciones.h"
+#include "polilinea.h"
 
 int main(int argc, char *argv[]) {
     if(argc != 2) {

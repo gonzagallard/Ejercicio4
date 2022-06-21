@@ -1,61 +1,11 @@
-#include <stdint.h>
 #include <stdlib.h>
 
-#include "funciones.h"
+#include "polilinea.h"
 
-#define MASK_ES_INF         0x40
-#define MASK_TIPO           0x0E
+#define MASK_NPUNTOS        0x03FF
 #define MASK_ES_RED         0x8000
 #define MASK_ES_GREEN       0x4000
 #define MASK_ES_BLUE        0x2000
-#define MASK_ON_RED_COLOR   0x04
-#define MASK_ON_GREEN_COLOR 0x02
-#define MASK_ON_BLUE_COLOR  0x01
-#define MASK_NPUNTOS        0x03FF
-
-typedef uint8_t color_t;
-
-static color_t color_crear(bool r, bool g, bool b){
-    return r << 2 | g << 1 | b ;
-}
-
-static void color_a_rgb(color_t c, uint8_t *r, uint8_t *g, uint8_t *b){
-    *r = (*g = (*b = 0));
-    if(c & MASK_ON_RED_COLOR)
-        *r = 0xFF;
-    if(c & MASK_ON_GREEN_COLOR)
-        *g = 0xFF;
-    if(c & MASK_ON_BLUE_COLOR)
-        *b = 0xFF;
-}
-
-const char *figuras[] = {
-    [ICONO]  = "Icono",
-    [NIVEL]  = "Nivel",
-    [SPRITE] = "Sprite",
-};
-
-const char* figura_tipo_a_cadena(figura_tipo_t figura){
-    return figuras[figura];
-}
-
-bool leer_encabezado_figura(FILE *f, char nombre[], figura_tipo_t *tipo, bool *infinito, size_t *cantidad_polilineas){
-    if(!fread(nombre, sizeof(char), 20, f))
-        return false;
-
-    uint8_t caracteristicas;
-    if(!fread(&caracteristicas, sizeof(uint8_t), 1, f))
-        return false;
-    *tipo = (caracteristicas & MASK_TIPO) >> 1;
-    *infinito = caracteristicas & MASK_ES_INF;
-    
-    uint16_t n_polilineas;
-    if(!fread(&n_polilineas, sizeof(uint16_t), 1, f))
-        return false;
-    *cantidad_polilineas = n_polilineas;
-    
-    return true;
-}
 
 struct polilinea{
     int x;
