@@ -60,7 +60,7 @@ polilinea_t *leer_polilinea(FILE *f){
 	        polilinea_destruir(polilinea);
 	        return NULL;
 	    }
-	if(!polilinea_setear_punto(polilinea, i, punto_x, punto_y)){
+	    if(!polilinea_setear_punto(polilinea, i, punto_x, punto_y)){
             polilinea_destruir(polilinea);
             return NULL;
         }
