@@ -57,9 +57,9 @@ polilinea_t *leer_polilinea(FILE *f){
     for(size_t i = 0; i < cant_puntos ; i++){
         float punto_x, punto_y;
         if(!fread(&punto_x, sizeof(float), 1, f) || !fread(&punto_y, sizeof(float), 1, f)){
-	    polilinea_destruir(polilinea);
-	    return NULL;
-	}
+	        polilinea_destruir(polilinea);
+	        return NULL;
+	    }
 	if(!polilinea_setear_punto(polilinea, i, punto_x, punto_y)){
             polilinea_destruir(polilinea);
             return NULL;
